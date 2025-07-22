@@ -1,0 +1,20 @@
+# Entornos virtuales
+venv/
+.env
+*.env
+
+# Archivos de configuración
+*.log
+*.sqlite3
+__pycache__/
+*.pyc
+.DS_Store
+
+# Archivos ocultos y configuraciones personales
+*.pem
+*.key
+*.crt
+*.db
+*.bak
+.idea/
+.vscode/
