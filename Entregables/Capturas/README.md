@@ -1,6 +1,6 @@
 # 📸 Capturas de Pantalla - PopcornHour
 
-Esta carpeta contiene las 5 capturas de pantalla requeridas para el Checkpoint 3.
+Esta carpeta contiene las 5 capturas de pantalla requeridas.
 
 ## 📋 Capturas Requeridas
 

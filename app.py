@@ -189,6 +189,7 @@ def login():
             if response.status_code == 200:
                 data = response.json()
                 user_data = data.get('user')
+                token = data.get('token')
                 
                 # Debug: Imprimir datos del usuario
                 print(f"🔍 DEBUG - Datos del usuario recibidos:")
@@ -198,6 +199,7 @@ def login():
                     print(f"  - user_type: {user_data.get('user_type')}")
                 
                 session['user'] = user_data
+                session['token'] = token  # Guardar el token JWT
                 flash('Inicio de sesión exitoso', 'success')
                 return redirect(url_for('home'))
             else:
@@ -233,7 +235,10 @@ def register():
             
             if response.status_code == 201:
                 data = response.json()
-                session['user'] = data.get('user')
+                user_data = data.get('user')
+                token = data.get('token')
+                session['user'] = user_data
+                session['token'] = token  # Guardar el token JWT
                 flash('Registro exitoso', 'success')
                 return redirect(url_for('home'))
             else:
@@ -433,13 +438,21 @@ def movie_detail(movie_id):
         content = request.form.get('content')
         rating = request.form.get('rating')
         try:
-            resp = requests.post(f"{API_BASE_URL}/reviews", json={
-                "user_id": session['user']['id'],
-                "content_type": "movie",
-                "content_id": movie_id,
-                "content": content,
-                "rating": float(rating)
-            })
+            # Obtener token de la sesión
+            token = session.get('token')
+            headers = {}
+            if token:
+                headers['Authorization'] = f'Bearer {token}'
+            
+            resp = requests.post(f"{API_BASE_URL}/reviews", 
+                json={
+                    "content_type": "movie",
+                    "content_id": movie_id,
+                    "rating": float(rating),
+                    "comment": content
+                },
+                headers=headers
+            )
             if resp.status_code in (200, 201):
                 flash('Reseña agregada exitosamente.', 'success')
                 return redirect(url_for('movie_detail', movie_id=movie_id))
@@ -480,13 +493,21 @@ def series_detail(series_id):
         content = request.form.get('content')
         rating = request.form.get('rating')
         try:
-            resp = requests.post(f"{API_BASE_URL}/reviews", json={
-                "user_id": session['user']['id'],
-                "content_type": "series",
-                "content_id": series_id,
-                "content": content,
-                "rating": float(rating)
-            })
+            # Obtener token de la sesión
+            token = session.get('token')
+            headers = {}
+            if token:
+                headers['Authorization'] = f'Bearer {token}'
+            
+            resp = requests.post(f"{API_BASE_URL}/reviews", 
+                json={
+                    "content_type": "series",
+                    "content_id": series_id,
+                    "rating": float(rating),
+                    "comment": content
+                },
+                headers=headers
+            )
             if resp.status_code in (200, 201):
                 flash('Reseña agregada exitosamente.', 'success')
                 return redirect(url_for('series_detail', series_id=series_id))

@@ -6,30 +6,22 @@ Esta carpeta contiene todos los materiales de entrega para los checkpoints del p
 
 ```
 Entregables/
-├── Checkpoint1-Documentacion/
-│   ├── README.md (copia del README principal)
-│   └── Estructura_Proyecto.pdf
-├── Checkpoint2-Diagramas/
-│   ├── ERD_Database.pdf
-│   └── User_Flows.pdf
-├── Checkpoint3-Capturas/
+├── Capturas/
 │   ├── 01-home-sin-sesion.png
 │   ├── 02-home-con-sesion-usuario.png
 │   ├── 03-home-con-sesion-moderador.png
 │   ├── 04-formulario-login.png
 │   └── 05-formulario-registro.png
-├── Checkpoint3-Video/
-│   └── flujo-completo.mp4
-├── Checkpoint4-Videos/
+├── Videos/
+│   ├── flujo-completo.mp4
 │   ├── 01-registro.mp4
 │   ├── 02-login.mp4
-│   └── 03-persistencia.mp4
-├── Checkpoint5-Videos/
+│   ├── 03-persistencia.mp4
 │   └── pagina-dinamica.mp4
 └── README.md (este archivo)
 ```
 
-## 📸 Checkpoint 3 - Capturas de Pantalla
+## 📸 Capturas de Pantalla
 
 ### Capturas Requeridas:
 1. **01-home-sin-sesion.png** - Página principal sin iniciar sesión
@@ -38,20 +30,14 @@ Entregables/
 4. **04-formulario-login.png** - Formulario de inicio de sesión
 5. **05-formulario-registro.png** - Formulario de registro
 
-### Video Requerido:
-- **flujo-completo.mp4** - Demostración completa del flujo de registro y login
-
-## 🎬 Checkpoint 4 - Videos de Autenticación
+## 🎬 Videos
 
 ### Videos Requeridos:
-1. **01-registro.mp4** - Proceso de registro de nuevo usuario
-2. **02-login.mp4** - Proceso de inicio de sesión
-3. **03-persistencia.mp4** - Demostración de persistencia de sesión
-
-## 🎯 Checkpoint 5 - Video de Página Dinámica
-
-### Video Requerido:
-- **pagina-dinamica.mp4** - Demostración de cambios dinámicos en la interfaz
+1. **flujo-completo.mp4** - Demostración completa del flujo de registro y login
+2. **01-registro.mp4** - Proceso de registro de nuevo usuario
+3. **02-login.mp4** - Proceso de inicio de sesión
+4. **03-persistencia.mp4** - Demostración de persistencia de sesión
+5. **pagina-dinamica.mp4** - Demostración de cambios dinámicos en la interfaz
 
 ## 📋 Instrucciones de Entrega
 
@@ -81,12 +67,8 @@ Entregables/
 
 ## ✅ Checklist de Entrega
 
-- [ ] 5 capturas de pantalla en Checkpoint3-Capturas/
-- [ ] 1 video de flujo completo en Checkpoint3-Video/
-- [ ] 3 videos de autenticación en Checkpoint4-Videos/
-- [ ] 1 video de página dinámica en Checkpoint5-Videos/
-- [ ] Documentación en PDF en Checkpoint1-Documentacion/
-- [ ] Diagramas en PDF en Checkpoint2-Diagramas/
+- [ ] 5 capturas de pantalla en Capturas/
+- [ ] 5 videos en Videos/
 
 ## 📝 Notas Importantes
 

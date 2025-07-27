@@ -1,67 +1,68 @@
-# 🎬 Video de Flujo Completo - PopcornHour
+# 🎬 Videos - PopcornHour
 
-Esta carpeta contiene el video requerido para el Checkpoint 3.
+Esta carpeta contiene los 5 videos requeridos.
 
-## 📋 Video Requerido
+## 📋 Videos Requeridos
 
-### flujo-completo.mp4
+### 1. flujo-completo.mp4
 - **Descripción:** Demostración completa del flujo de registro y login
+- **Contenido:**
+  - Mostrar página principal sin sesión
+  - Hacer clic en "Registrarse"
+  - Llenar formulario de registro
+  - Mostrar mensaje de éxito
+  - Hacer clic en "Iniciar Sesión"
+  - Llenar formulario de login
+  - Mostrar login exitoso
+  - Navegar por la aplicación
 
-## 🎯 Contenido del Video
+### 2. 01-registro.mp4
+- **Descripción:** Proceso de registro de nuevo usuario
+- **Contenido:**
+  - Ir a /register
+  - Llenar formulario completo
+  - Mostrar mensaje de éxito
+  - Verificar redirección
 
-### Secuencia Recomendada:
+### 3. 02-login.mp4
+- **Descripción:** Proceso de inicio de sesión
+- **Contenido:**
+  - Ir a /login
+  - Login con usuario existente
+  - Mostrar acceso al perfil
+  - Verificar sesión activa
 
-1. **Introducción (30 segundos)**
-   - Mostrar la página principal sin sesión
-   - Explicar brevemente qué se va a demostrar
+### 4. 03-persistencia.mp4
+- **Descripción:** Demostración de persistencia de sesión
+- **Contenido:**
+  - Estar logueado
+  - Recargar página
+  - Ir a /profile
+  - Mostrar que la sesión persiste
 
-2. **Registro de Usuario (1-2 minutos)**
-   - Hacer clic en "Registrarse"
-   - Mostrar el formulario de registro
-   - Llenar todos los campos:
-     - Usuario: `nuevo_usuario`
-     - Email: `nuevo@ejemplo.com`
-     - Contraseña: `123456`
-   - Hacer clic en "Registrarse"
-   - Mostrar mensaje de éxito
-   - Mostrar redirección a la página principal
+### 5. pagina-dinamica.mp4
+- **Descripción:** Demostración de cambios dinámicos en la interfaz
+- **Contenido:**
+  - Mostrar página sin sesión
+  - Hacer login
+  - Mostrar cambios en la interfaz
+  - Navegar por películas/series
+  - Mostrar interacciones (reseñas, foro)
+  - Cambiar a moderador
+  - Mostrar funciones de moderador
 
-3. **Inicio de Sesión (1-2 minutos)**
-   - Hacer clic en "Cerrar Sesión" (si está logueado)
-   - Hacer clic en "Iniciar Sesión"
-   - Mostrar el formulario de login
-   - Llenar campos:
-     - Usuario: `testuser`
-     - Contraseña: `123456`
-   - Hacer clic en "Iniciar Sesión"
-   - Mostrar login exitoso
-   - Mostrar cambios en la interfaz
-
-4. **Navegación Básica (1 minuto)**
-   - Mostrar que el usuario está logueado
-   - Navegar por algunas secciones
-   - Mostrar el perfil del usuario
-   - Finalizar con logout
-
-## 🛠️ Herramientas de Grabación
-
-### Software Recomendado:
-- **Windows:** OBS Studio, Windows Game Bar (Win + G)
-- **macOS:** QuickTime Player, OBS Studio
-- **Linux:** OBS Studio, SimpleScreenRecorder
-
-### Software Recomendado:
+## 🛠️ Software Recomendado
 - **Windows:** OBS Studio, Windows Game Bar (Win + G)
 - **macOS:** QuickTime Player, OBS Studio
 - **Linux:** OBS Studio, SimpleScreenRecorder
 
 ## 🎬 Consejos para la Grabación
 
-### Antes de Grabar:
+### Antes de Grabar
 1. **Prepara el entorno**
    - Asegúrate de que el servidor esté corriendo
-   - Limpia el navegador (sin sesiones activas)
-   - Maximiza la ventana del navegador
+   - Limpia el navegador completamente
+   - Ten listos los usuarios de prueba
 
 2. **Planifica la secuencia**
    - Practica los pasos antes de grabar
@@ -73,7 +74,7 @@ Esta carpeta contiene el video requerido para el Checkpoint 3.
    - Prueba el audio si lo vas a usar
    - Verifica que la calidad sea buena
 
-### Durante la Grabación:
+### Durante la Grabación
 1. **Sé claro y pausado**
    - No te apresures en los clics
    - Espera a que las páginas carguen
@@ -89,7 +90,7 @@ Esta carpeta contiene el video requerido para el Checkpoint 3.
    - Mantén el cursor visible
    - Asegúrate de que el texto sea legible
 
-### Después de Grabar:
+### Después de Grabar
 1. **Revisa el video**
    - Verifica que se vea todo claramente
    - Comprueba que la secuencia sea lógica
@@ -100,12 +101,13 @@ Esta carpeta contiene el video requerido para el Checkpoint 3.
    - Ajusta la velocidad si es muy lento/rápido
    - Añade títulos o transiciones si quieres
 
-## ✅ Checklist del Video
+## ✅ Checklist de Videos
 
-- [ ] Muestra registro completo
-- [ ] Muestra login completo
-- [ ] Demuestra navegación básica
-- [ ] Incluye logout
+- [ ] flujo-completo.mp4 - Flujo completo de registro y login
+- [ ] 01-registro.mp4 - Proceso de registro
+- [ ] 02-login.mp4 - Proceso de login
+- [ ] 03-persistencia.mp4 - Persistencia de sesión
+- [ ] pagina-dinamica.mp4 - Página dinámica
 
 ## 🔧 Solución de Problemas
 

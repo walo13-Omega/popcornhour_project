@@ -380,7 +380,7 @@ app.post('/api/reviews', authenticateToken, async (req, res) => {
         }
 
         const newReview = await pool.query(
-            'INSERT INTO reviews (user_id, content_id, content_type, rating, comment) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            'INSERT INTO reviews (user_id, content_id, content_type, rating, content) VALUES ($1, $2, $3, $4, $5) RETURNING *',
             [req.user.id, content_id, content_type, rating, comment]
         );
 
