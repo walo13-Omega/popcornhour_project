@@ -295,15 +295,15 @@ app.get('/api/movies/:id', async (req, res) => {
 // Crear película (solo moderadores)
 app.post('/api/movies', authenticateToken, requireModerator, async (req, res) => {
     try {
-        const { title, description, release_year, duration_minutes, genre, director, imdb_rating, poster_url } = req.body;
+        const { title, description, release_year, duration_minutes, genre, imdb_rating, poster_url } = req.body;
 
         if (!title || !release_year) {
             return res.status(400).json({ error: 'Título y año de lanzamiento son requeridos' });
         }
 
         const newMovie = await pool.query(
-            'INSERT INTO movies (title, description, release_year, duration_minutes, genre, director, imdb_rating, poster_url, created_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
-            [title, description, release_year, duration_minutes, genre, director, imdb_rating, poster_url, req.user.id]
+            'INSERT INTO movies (title, description, release_year, duration_minutes, genre, imdb_rating, poster_url, created_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+            [title, description, release_year, duration_minutes, genre, imdb_rating, poster_url, req.user.id]
         );
 
         res.status(201).json({
@@ -463,6 +463,116 @@ app.post('/api/forum/discussions', authenticateToken, async (req, res) => {
 
     } catch (error) {
         console.error('Error creando discusión:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+// Editar película (solo moderadores)
+app.put('/api/movies/:id', authenticateToken, requireModerator, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { title, description, release_year, duration_minutes, genre, imdb_rating, poster_url } = req.body;
+
+        if (!title || !release_year) {
+            return res.status(400).json({ error: 'Título y año de lanzamiento son requeridos' });
+        }
+
+        const result = await pool.query(
+            `UPDATE movies
+             SET title = $1,
+                 description = $2,
+                 release_year = $3,
+                 duration_minutes = $4,
+                 genre = $5,
+                 imdb_rating = $6,
+                 poster_url = $7,
+                 updated_at = CURRENT_TIMESTAMP
+             WHERE id = $8
+             RETURNING *`,
+            [title, description, release_year, duration_minutes, genre, imdb_rating, poster_url, id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Película no encontrada' });
+        }
+
+        res.json({
+            message: 'Película actualizada exitosamente',
+            movie: result.rows[0]
+        });
+
+    } catch (error) {
+        console.error('Error actualizando película:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+// Eliminar película (solo moderadores)
+app.delete('/api/movies/:id', authenticateToken, requireModerator, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await pool.query('DELETE FROM movies WHERE id = $1 RETURNING *', [id]);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Película no encontrada' });
+        }
+        res.json({ message: 'Película eliminada exitosamente' });
+    } catch (error) {
+        console.error('Error eliminando película:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+// Editar serie (solo moderadores)
+app.put('/api/series/:id', authenticateToken, requireModerator, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { title, description, release_year, duration_minutes, genre, imdb_rating, poster_url } = req.body;
+
+        if (!title || !release_year) {
+            return res.status(400).json({ error: 'Título y año de lanzamiento son requeridos' });
+        }
+
+        const result = await pool.query(
+            `UPDATE series
+             SET title = $1,
+                 description = $2,
+                 release_year = $3,
+                 duration_minutes = $4,
+                 genre = $5,
+                 imdb_rating = $6,
+                 poster_url = $7,
+                 updated_at = CURRENT_TIMESTAMP
+             WHERE id = $8
+             RETURNING *`,
+            [title, description, release_year, duration_minutes, genre, imdb_rating, poster_url, id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Serie no encontrada' });
+        }
+
+        res.json({
+            message: 'Serie actualizada exitosamente',
+            series: result.rows[0]
+        });
+
+    } catch (error) {
+        console.error('Error actualizando serie:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+// Eliminar serie (solo moderadores)
+app.delete('/api/series/:id', authenticateToken, requireModerator, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await pool.query('DELETE FROM series WHERE id = $1 RETURNING *', [id]);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Serie no encontrada' });
+        }
+        res.json({ message: 'Serie eliminada exitosamente' });
+    } catch (error) {
+        console.error('Error eliminando serie:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });

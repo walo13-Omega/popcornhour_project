@@ -354,26 +354,29 @@ def add_movie():
     if request.method == 'POST':
         title = request.form.get('title')
         description = request.form.get('description')
-        release_year = request.form.get('release_year')
-        duration_minutes = request.form.get('duration_minutes')
-        genre = request.form.get('genre')
         imdb_rating = request.form.get('imdb_rating')
+        genres = request.form.get('genres')
+        release_year = request.form.get('release_year')
+        data = {
+            "title": title,
+            "description": description,
+            "imdb_rating": imdb_rating,
+            "genres": genres,
+            "release_year": int(release_year),
+            "created_by": session['user']['id']
+        }
+        token = session.get('token')
+        headers = {}
+        if token:
+            headers['Authorization'] = f'Bearer {token}'
         try:
-            response = requests.post(f"{API_BASE_URL}/movies", json={
-                "title": title,
-                "description": description,
-                "release_year": int(release_year),
-                "duration_minutes": int(duration_minutes),
-                "genre": genre,
-                "imdb_rating": float(imdb_rating),
-                "created_by": session['user']['id']
-            })
-            if response.status_code in (200, 201):
+            resp = requests.post(f"{API_BASE_URL}/movies", json=data, headers=headers)
+            print("DEBUG add_movie:", resp.status_code, resp.text)  # Debug
+            if resp.status_code == 201:
                 flash('Película agregada exitosamente.', 'success')
-                return redirect(url_for('home'))
+                return redirect(url_for('movies'))
             else:
-                error = response.json().get('error', 'Error al agregar película')
-                flash(error, 'danger')
+                flash(resp.json().get('error', 'Error al agregar la película.'), 'danger')
         except Exception as e:
             flash(f"Error de conexión: {e}", 'danger')
     return render_template('add_movie.html')
@@ -384,26 +387,29 @@ def add_series():
     if request.method == 'POST':
         title = request.form.get('title')
         description = request.form.get('description')
-        release_year = request.form.get('release_year')
-        seasons = request.form.get('seasons')
-        genre = request.form.get('genre')
         imdb_rating = request.form.get('imdb_rating')
+        genres = request.form.get('genres')
+        release_year = request.form.get('release_year')
+        data = {
+            "title": title,
+            "description": description,
+            "imdb_rating": imdb_rating,
+            "genres": genres,
+            "release_year": int(release_year),
+            "created_by": session['user']['id']
+        }
+        token = session.get('token')
+        headers = {}
+        if token:
+            headers['Authorization'] = f'Bearer {token}'
         try:
-            response = requests.post(f"{API_BASE_URL}/series", json={
-                "title": title,
-                "description": description,
-                "release_year": int(release_year),
-                "seasons": int(seasons),
-                "genre": genre,
-                "imdb_rating": float(imdb_rating),
-                "created_by": session['user']['id']
-            })
-            if response.status_code in (200, 201):
+            resp = requests.post(f"{API_BASE_URL}/series", json=data, headers=headers)
+            print("DEBUG add_series:", resp.status_code, resp.text)  # Debug
+            if resp.status_code == 201:
                 flash('Serie agregada exitosamente.', 'success')
-                return redirect(url_for('home'))
+                return redirect(url_for('series'))
             else:
-                error = response.json().get('error', 'Error al agregar serie')
-                flash(error, 'danger')
+                flash(resp.json().get('error', 'Error al agregar la serie.'), 'danger')
         except Exception as e:
             flash(f"Error de conexión: {e}", 'danger')
     return render_template('add_series.html')
@@ -538,12 +544,17 @@ def admin_content():
 @app.route('/delete_movie/<int:movie_id>')
 @moderator_required
 def delete_movie(movie_id):
+    token = session.get('token')
+    headers = {}
+    if token:
+        headers['Authorization'] = f'Bearer {token}'
     try:
-        resp = requests.delete(f"{API_BASE_URL}/movies/{movie_id}")
+        resp = requests.delete(f"{API_BASE_URL}/movies/{movie_id}", headers=headers)
+        print("DEBUG delete_movie:", resp.status_code, resp.text)
         if resp.status_code == 200:
             flash('Película eliminada exitosamente.', 'success')
         else:
-            flash('Error al eliminar la película.', 'danger')
+            flash(resp.json().get('error', 'Error al eliminar la película.'), 'danger')
     except Exception as e:
         flash(f"Error de conexión: {e}", 'danger')
     return redirect(url_for('admin_content'))
@@ -551,12 +562,17 @@ def delete_movie(movie_id):
 @app.route('/delete_series/<int:series_id>')
 @moderator_required
 def delete_series(series_id):
+    token = session.get('token')
+    headers = {}
+    if token:
+        headers['Authorization'] = f'Bearer {token}'
     try:
-        resp = requests.delete(f"{API_BASE_URL}/series/{series_id}")
+        resp = requests.delete(f"{API_BASE_URL}/series/{series_id}", headers=headers)
+        print("DEBUG delete_series:", resp.status_code, resp.text)
         if resp.status_code == 200:
             flash('Serie eliminada exitosamente.', 'success')
         else:
-            flash('Error al eliminar la serie.', 'danger')
+            flash(resp.json().get('error', 'Error al eliminar la serie.'), 'danger')
     except Exception as e:
         flash(f"Error de conexión: {e}", 'danger')
     return redirect(url_for('admin_content'))
@@ -575,7 +591,6 @@ def edit_movie(movie_id):
     except Exception as e:
         flash(f"Error de conexión: {e}", 'danger')
         return redirect(url_for('admin_content'))
-    # Editar
     if request.method == 'POST':
         title = request.form.get('title')
         description = request.form.get('description')
@@ -583,20 +598,28 @@ def edit_movie(movie_id):
         duration_minutes = request.form.get('duration_minutes')
         genre = request.form.get('genre')
         imdb_rating = request.form.get('imdb_rating')
+        poster_url = request.form.get('poster_url')
+        data = {
+            "title": title,
+            "description": description,
+            "release_year": int(release_year) if release_year else None,
+            "duration_minutes": int(duration_minutes) if duration_minutes else None,
+            "genre": genre,
+            "imdb_rating": imdb_rating,
+            "poster_url": poster_url
+        }
+        token = session.get('token')
+        headers = {}
+        if token:
+            headers['Authorization'] = f'Bearer {token}'
         try:
-            update_resp = requests.put(f"{API_BASE_URL}/movies/{movie_id}", json={
-                "title": title,
-                "description": description,
-                "release_year": int(release_year),
-                "duration_minutes": int(duration_minutes),
-                "genre": genre,
-                "imdb_rating": float(imdb_rating)
-            })
+            update_resp = requests.put(f"{API_BASE_URL}/movies/{movie_id}", json=data, headers=headers)
+            print("DEBUG edit_movie:", update_resp.status_code, update_resp.text)
             if update_resp.status_code == 200:
                 flash('Película actualizada exitosamente.', 'success')
                 return redirect(url_for('admin_content'))
             else:
-                flash('Error al actualizar la película.', 'danger')
+                flash(update_resp.json().get('error', 'Error al actualizar la película.'), 'danger')
         except Exception as e:
             flash(f"Error de conexión: {e}", 'danger')
     return render_template('edit_movie.html', movie=movie)
@@ -615,38 +638,50 @@ def edit_series(series_id):
     except Exception as e:
         flash(f"Error de conexión: {e}", 'danger')
         return redirect(url_for('admin_content'))
-    # Editar
     if request.method == 'POST':
         title = request.form.get('title')
         description = request.form.get('description')
         release_year = request.form.get('release_year')
-        seasons = request.form.get('seasons')
+        duration_minutes = request.form.get('duration_minutes')
         genre = request.form.get('genre')
         imdb_rating = request.form.get('imdb_rating')
+        poster_url = request.form.get('poster_url')
+        data = {
+            "title": title,
+            "description": description,
+            "release_year": int(release_year) if release_year else None,
+            "duration_minutes": int(duration_minutes) if duration_minutes else None,
+            "genre": genre,
+            "imdb_rating": imdb_rating,
+            "poster_url": poster_url
+        }
+        token = session.get('token')
+        headers = {}
+        if token:
+            headers['Authorization'] = f'Bearer {token}'
         try:
-            update_resp = requests.put(f"{API_BASE_URL}/series/{series_id}", json={
-                "title": title,
-                "description": description,
-                "release_year": int(release_year),
-                "seasons": int(seasons),
-                "genre": genre,
-                "imdb_rating": float(imdb_rating)
-            })
+            update_resp = requests.put(f"{API_BASE_URL}/series/{series_id}", json=data, headers=headers)
+            print("DEBUG edit_series:", update_resp.status_code, update_resp.text)
             if update_resp.status_code == 200:
                 flash('Serie actualizada exitosamente.', 'success')
                 return redirect(url_for('admin_content'))
             else:
-                flash('Error al actualizar la serie.', 'danger')
+                flash(update_resp.json().get('error', 'Error al actualizar la serie.'), 'danger')
         except Exception as e:
             flash(f"Error de conexión: {e}", 'danger')
     return render_template('edit_series.html', series=series)
 
-@app.route('/delete_review/<int:review_id>/<string:content_type>/<int:content_id>')
+@app.route('/delete_review/<int:review_id>/<string:content_type>/<int:content_id>', methods=['POST'])
+@login_required
 def delete_review(review_id, content_type, content_id):
     user = session.get('user')
+    token = session.get('token')
+    headers = {}
+    if token:
+        headers['Authorization'] = f'Bearer {token}'
     # Obtener la reseña para verificar permisos
     try:
-        resp = requests.get(f"{API_BASE_URL}/reviews/{review_id}")
+        resp = requests.get(f"{API_BASE_URL}/reviews/{review_id}", headers=headers)
         if resp.status_code == 200:
             review = resp.json()
         else:
@@ -661,7 +696,7 @@ def delete_review(review_id, content_type, content_id):
         return redirect(url_for('home'))
     # Eliminar
     try:
-        del_resp = requests.delete(f"{API_BASE_URL}/reviews/{review_id}")
+        del_resp = requests.delete(f"{API_BASE_URL}/reviews/{review_id}", headers=headers)
         if del_resp.status_code == 200:
             flash('Reseña eliminada exitosamente.', 'success')
         else:
@@ -675,11 +710,16 @@ def delete_review(review_id, content_type, content_id):
         return redirect(url_for('series_detail', series_id=content_id))
 
 @app.route('/edit_review/<int:review_id>/<string:content_type>/<int:content_id>', methods=['GET', 'POST'])
+@login_required
 def edit_review(review_id, content_type, content_id):
     user = session.get('user')
+    token = session.get('token')
+    headers = {}
+    if token:
+        headers['Authorization'] = f'Bearer {token}'
     # Obtener la reseña para verificar permisos
     try:
-        resp = requests.get(f"{API_BASE_URL}/reviews/{review_id}")
+        resp = requests.get(f"{API_BASE_URL}/reviews/{review_id}", headers=headers)
         if resp.status_code == 200:
             review = resp.json()
         else:
@@ -700,7 +740,7 @@ def edit_review(review_id, content_type, content_id):
             update_resp = requests.put(f"{API_BASE_URL}/reviews/{review_id}", json={
                 "content": content,
                 "rating": float(rating)
-            })
+            }, headers=headers)
             if update_resp.status_code == 200:
                 flash('Reseña actualizada exitosamente.', 'success')
             else:
