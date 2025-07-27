@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar Contenido - PopcornHour</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">🍿 PopcornHour</a>
+            <div class="d-flex ms-auto">
+                {% if session.user %}
+                    <a href="/profile" class="btn btn-outline-light me-2">Perfil</a>
+                    <span class="navbar-text me-3">Hola, {{ session.user.username }}</span>
+                    <a href="/logout" class="btn btn-outline-light">Cerrar Sesión</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <h1 class="mb-4">Administrar Contenido</h1>
+        <ul class="nav nav-tabs" id="adminTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="movies-tab" data-bs-toggle="tab" data-bs-target="#movies" type="button" role="tab">Películas</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="series-tab" data-bs-toggle="tab" data-bs-target="#series" type="button" role="tab">Series</button>
+            </li>
+        </ul>
+        <div class="tab-content mt-3" id="adminTabContent">
+            <div class="tab-pane fade show active" id="movies" role="tabpanel">
+                <h4>Películas</h4>
+                {% if movies %}
+                <table class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            <th>Título</th><th>Año</th><th>Género</th><th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for m in movies %}
+                        <tr>
+                            <td>{{ m.title }}</td>
+                            <td>{{ m.release_year }}</td>
+                            <td>{{ m.genre }}</td>
+                            <td>
+                                <a href="/edit_movie/{{ m.id }}" class="btn btn-sm btn-warning">Editar</a>
+                                <a href="/delete_movie/{{ m.id }}" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que deseas eliminar esta película?');">Eliminar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="alert alert-info">No hay películas para mostrar.</div>
+                {% endif %}
+            </div>
+            <div class="tab-pane fade" id="series" role="tabpanel">
+                <h4>Series</h4>
+                {% if series %}
+                <table class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            <th>Título</th><th>Año</th><th>Género</th><th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in series %}
+                        <tr>
+                            <td>{{ s.title }}</td>
+                            <td>{{ s.release_year }}</td>
+                            <td>{{ s.genre }}</td>
+                            <td>
+                                <a href="/edit_series/{{ s.id }}" class="btn btn-sm btn-warning">Editar</a>
+                                <a href="/delete_series/{{ s.id }}" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro que deseas eliminar esta serie?');">Eliminar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="alert alert-info">No hay series para mostrar.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

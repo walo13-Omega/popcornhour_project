@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ series.title if series else 'Serie no encontrada' }} - PopcornHour</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #1a1a2e, #16213e) !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .series-hero {
+            background: linear-gradient(135deg, rgba(0,123,255,0.1) 0%, rgba(0,105,217,0.05) 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border: 1px solid rgba(0,123,255,0.2);
+        }
+        
+        .series-poster {
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            transition: transform 0.3s ease;
+        }
+        
+        .series-poster:hover {
+            transform: scale(1.02);
+        }
+        
+        .series-info {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            border-radius: 15px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .series-title {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .info-item {
+            background: linear-gradient(145deg, rgba(0,123,255,0.1), rgba(0,105,217,0.05));
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-left: 4px solid #007bff;
+        }
+        
+        .rating-badge {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            border: none;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+        }
+        
+        .reviews-section {
+            background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .review-card {
+            background: linear-gradient(145deg, rgba(0,123,255,0.05), rgba(0,105,217,0.02));
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(0,123,255,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .review-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,123,255,0.1);
+        }
+        
+        .add-review-form {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(0,123,255,0.2);
+        }
+        
+        .btn-glow {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-glow:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0,123,255,0.5);
+        }
+        
+        .section-title {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="fas fa-popcorn me-2"></i>PopcornHour
+            </a>
+            <div class="d-flex ms-auto">
+                {% if session.user %}
+                    <a href="/profile" class="btn btn-outline-light me-2">
+                        <i class="fas fa-user me-1"></i>Perfil
+                    </a>
+                    <span class="navbar-text me-3">
+                        <i class="fas fa-hand-wave me-1"></i>Hola, {{ session.user.username }}
+                    </span>
+                    <a href="/logout" class="btn btn-outline-light">
+                        <i class="fas fa-sign-out-alt me-1"></i>Cerrar Sesión
+                    </a>
+                {% else %}
+                    <a href="/login" class="btn btn-outline-light me-2">
+                        <i class="fas fa-sign-in-alt me-1"></i>Iniciar Sesión
+                    </a>
+                    <a href="/register" class="btn btn-success">
+                        <i class="fas fa-user-plus me-1"></i>Registrarse
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                <i class="fas fa-info-circle me-2"></i>{{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        {% if series %}
+        <div class="series-hero">
+            <div class="row g-4 align-items-center">
+                <div class="col-md-4 text-center">
+                    {% if series.poster_url and series.poster_url != 'null' %}
+                        <img src="{{ series.poster_url }}" alt="{{ series.title }}" class="series-poster img-fluid" style="max-height: 450px; object-fit: cover;">
+                    {% else %}
+                        <div class="series-poster d-flex align-items-center justify-content-center" style="height: 450px; background: linear-gradient(145deg, #2a2a2a, #1a1a1a); border: 2px dashed #007bff;">
+                            <div class="text-center">
+                                <i class="fas fa-tv fa-4x text-primary mb-3"></i>
+                                <h5 class="text-light">{{ series.title }}</h5>
+                                <small class="text-muted">Poster no disponible</small>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <div class="series-info">
+                        <h1 class="series-title">{{ series.title }}</h1>
+                        <p class="lead text-light mb-4">{{ series.overview or series.description }}</p>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-item">
+                                    <i class="fas fa-calendar-alt me-2 text-primary"></i>
+                                    <strong>Estreno:</strong> {{ series.release_date or series.release_year }}
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-clock me-2 text-primary"></i>
+                                    <strong>Duración:</strong> {{ series.duration_minutes }} min
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-tag me-2 text-primary"></i>
+                                    <strong>Género:</strong> {{ series.genre }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-item">
+                                    <i class="fas fa-star me-2 text-primary"></i>
+                                    <strong>Calificación TMDb:</strong> 
+                                    {% if series.vote_average %}
+                                        <span class="rating-badge">{{ series.vote_average }}/10</span>
+                                    {% else %}
+                                        <span class="text-muted">No disponible</span>
+                                    {% endif %}
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-star-half-alt me-2 text-primary"></i>
+                                    <strong>Calificación local:</strong> 
+                                    <span class="rating-badge">{{ series.imdb_rating }}/5</span>
+                                </div>
+                                {% if series.genres_tmdb %}
+                                <div class="info-item">
+                                    <i class="fas fa-list me-2 text-primary"></i>
+                                    <strong>Géneros TMDb:</strong> 
+                                    <span class="text-light">{{ series.genres_tmdb|join(', ') }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="reviews-section">
+            <h2 class="section-title">
+                <i class="fas fa-comments me-2"></i>Reseñas
+            </h2>
+            
+            {% if reviews %}
+            <div class="row">
+                {% for r in reviews %}
+                <div class="col-12">
+                    <div class="review-card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-user-circle me-2 text-primary"></i>
+                                    <strong class="text-light">{{ r.username or 'Usuario' }}</strong>
+                                    <span class="rating-badge ms-2">{{ r.rating }}/5</span>
+                                </div>
+                                <p class="mb-0 text-light">{{ r.content }}</p>
+                            </div>
+                            {% if session.user and (session.user.id == r.user_id or session.user.user_type == 'moderator') %}
+                            <div class="d-flex">
+                                <a href="/edit_review/{{ r.id }}/series/{{ series.id }}" class="btn btn-sm btn-primary me-2">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form method="post" action="/delete_review/{{ r.id }}/series/{{ series.id }}" onsubmit="return confirm('¿Seguro que deseas eliminar esta reseña?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-4">
+                <i class="fas fa-comment-slash fa-3x text-muted mb-3"></i>
+                <p class="text-muted">No hay reseñas para esta serie.</p>
+            </div>
+            {% endif %}
+
+            {% if session.user %}
+            <div class="add-review-form mt-4">
+                <h5 class="text-light mb-3">
+                    <i class="fas fa-plus-circle me-2 text-primary"></i>Agregar reseña
+                </h5>
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="content" class="form-label text-light">Comentario</label>
+                        <textarea class="form-control bg-dark text-light border-primary" id="content" name="content" rows="3" required placeholder="Escribe tu opinión sobre la serie..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="rating" class="form-label text-light">Calificación (1-5)</label>
+                        <input type="number" class="form-control bg-dark text-light border-primary" id="rating" name="rating" min="1" max="5" step="0.1" required>
+                    </div>
+                    <button type="submit" class="btn btn-glow">
+                        <i class="fas fa-paper-plane me-2"></i>Enviar reseña
+                    </button>
+                </form>
+            </div>
+            {% else %}
+            <div class="alert alert-warning text-center mt-4">
+                <i class="fas fa-sign-in-alt me-2"></i>Inicia sesión para agregar una reseña.
+            </div>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="alert alert-danger text-center">
+            <i class="fas fa-exclamation-triangle me-2"></i>Serie no encontrada.
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

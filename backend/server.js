@@ -24,7 +24,7 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 
 // Middleware
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5000', 'http://127.0.0.1:5000'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
@@ -275,6 +275,23 @@ app.get('/api/movies', async (req, res) => {
     }
 });
 
+// Obtener película por ID
+app.get('/api/movies/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await pool.query('SELECT * FROM movies WHERE id = $1', [id]);
+        
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Película no encontrada' });
+        }
+        
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error('Error obteniendo película:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
 // Crear película (solo moderadores)
 app.post('/api/movies', authenticateToken, requireModerator, async (req, res) => {
     try {
@@ -385,6 +402,23 @@ app.get('/api/series', async (req, res) => {
         res.json(result.rows);
     } catch (error) {
         console.error('Error obteniendo series:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+// Obtener serie por ID
+app.get('/api/series/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await pool.query('SELECT * FROM series WHERE id = $1', [id]);
+        
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Serie no encontrada' });
+        }
+        
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error('Error obteniendo serie:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });

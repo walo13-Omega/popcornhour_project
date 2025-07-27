@@ -1,0 +1,23 @@
+{
+  "name": "popcornhour_project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "generate_hash.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/walo13-Omega/popcornhour_project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/walo13-Omega/popcornhour_project/issues"
+  },
+  "homepage": "https://github.com/walo13-Omega/popcornhour_project#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.2"
+  }
+}

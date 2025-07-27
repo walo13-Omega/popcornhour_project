@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Series - PopcornHour</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .series-card {
+            transition: all 0.3s ease;
+            border: none;
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            box-shadow: 0 8px 32px rgba(0,191,255,0.15);
+        }
+        .series-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,191,255,0.2);
+            border: 2px solid #00bfff;
+        }
+        .rating-badge {
+            background: linear-gradient(45deg, #00bfff, #1e90ff);
+            border: none;
+            font-weight: bold;
+        }
+        .genre-badge {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            font-size: 0.8rem;
+        }
+        .section-title {
+            background: linear-gradient(45deg, #00bfff, #1e90ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-dark text-light">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #1a1a2e, #16213e);">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="fas fa-popcorn me-2"></i>PopcornHour
+            </a>
+            <div class="d-flex ms-auto">
+                {% if session.user %}
+                    <a href="/profile" class="btn btn-outline-light me-2"><i class="fas fa-user me-1"></i>Perfil</a>
+                    <span class="navbar-text me-3"><i class="fas fa-hand-wave me-1"></i>Hola, {{ session.user.username }}</span>
+                    <a href="/logout" class="btn btn-outline-light"><i class="fas fa-sign-out-alt me-1"></i>Cerrar Sesión</a>
+                {% else %}
+                    <a href="/login" class="btn btn-outline-light me-2"><i class="fas fa-sign-in-alt me-1"></i>Iniciar Sesión</a>
+                    <a href="/register" class="btn btn-success"><i class="fas fa-user-plus me-1"></i>Registrarse</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1 class="section-title mb-4"><i class="fas fa-tv me-2"></i>Series</h1>
+        <form class="row g-3 mb-4" method="get">
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="search" placeholder="Buscar por título..." value="{{ search }}">
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" name="genre">
+                    <option value="Todos">Todos los géneros</option>
+                    {% for g in genres %}
+                        <option value="{{ g }}" {% if genre==g %}selected{% endif %}>{{ g }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" name="year">
+                    <option value="Todos">Todos los años</option>
+                    {% for y in years %}
+                        <option value="{{ y }}" {% if year==y %}selected{% endif %}>{{ y }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-info w-100"><i class="fas fa-filter me-1"></i>Filtrar</button>
+            </div>
+        </form>
+        {% if series %}
+        <div class="row g-4">
+            {% for s in series %}
+            <div class="col-md-4 col-lg-3">
+                <div class="card series-card h-100 d-flex flex-column">
+                    <img src="{{ s.poster_url }}" class="card-img-top" alt="{{ s.title }}" style="height: 270px; object-fit: cover; border-radius: 10px 10px 0 0;">
+                    <div class="card-body bg-dark text-light flex-grow-1 d-flex flex-column justify-content-between" style="border-radius: 0 0 10px 10px;">
+                        <h6 class="card-title fw-bold mb-1">{{ s.title }}</h6>
+                        <span class="badge genre-badge mb-2">{{ s.genre }}</span>
+                        <p class="card-text small mb-1" style="min-height: 48px;">{{ s.overview[:70] }}...</p>
+                        <div class="mb-1">
+                            <span class="badge bg-info text-dark me-1"><i class="fas fa-star"></i> {{ s.vote_average }}/10 TMDb</span>
+                            <span class="badge bg-secondary">{{ s.imdb_rating }}/5 Local</span>
+                        </div>
+                        <p class="mb-1"><small><strong>Estreno:</strong> {{ s.release_date or s.release_year }}</small></p>
+                        <p class="mb-1"><small><strong>Géneros TMDb:</strong> {{ s.genres_tmdb|join(', ') }}</small></p>
+                                                    <a href="/series/{{ s.id }}" class="btn btn-sm btn-outline-info w-100 mt-2">Ver detalles</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-tv fa-3x text-info mb-3"></i>
+            <p class="text-muted">No hay series para mostrar</p>
+        </div>
+        {% endif %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
