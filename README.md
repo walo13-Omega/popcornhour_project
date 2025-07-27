@@ -109,15 +109,12 @@ python app.py
 - **Frontend:** http://localhost:5000
 - **Backend API:** http://localhost:3001/api
 
-## 👥 Usuarios de Prueba
+## 👥 Usuario de Prueba Sugerido
 
-### Moderadores
-- `superadmin` / `123456`
-- `moderator2` / `123456`
+Para acceder a todas las funciones de moderador y realizar pruebas completas, inicia sesión con:
 
-### Usuarios Estándar
-- `testuser` / `123456`
-- `testuser2` / `123456`
+- **Usuario:** `superadmin`
+- **Contraseña:** `123456`
 
 ## 🔧 Scripts Útiles
 
